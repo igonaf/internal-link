@@ -45,8 +45,6 @@ var applocation = {
                             },
                             error: function () {
                                 alert('failed check');
-                                event.preventDefault();
-                                _this.render_message_block(min_quatity_of_links);
                             }
                         });
                     } else {
@@ -69,7 +67,7 @@ var applocation = {
             var suff_text='';
 
             if (number == 1){
-               suff_text = ' internal11 link is required to publish this page - Add meaningful and useful link to other page on this website to publish the page';
+               suff_text = ' internal link is required to publish this page - Add meaningful and useful link to other page on this website to publish the page';
             } else {
                 suff_text = ' internal links are required to publish this page - Add meaningful and useful links to other pages on this website to publish the page';
             }
