@@ -1,6 +1,6 @@
 <?php
 
-require_once ('Functions.php');
+require_once('Functions.php');
 
 /**
  * Class LinksChecking
@@ -26,10 +26,12 @@ class LinksChecking
      */
     public function get_enqueue_scripts()
     {
-        if(array_key_exists(get_post_type(), Functions::get_IL_option('post_types'))) {
-            wp_register_script('parse', plugin_dir_url(__FILE__) . '../public/js/parse.js', ['jquery']);
-            wp_localize_script('parse', 'parse_vars', $this->get_parse_data());
-            wp_enqueue_script('parse');
+        if (is_string(get_post_type())) {
+            if (array_key_exists(get_post_type(), Functions::get_IL_option('post_types'))) {
+                wp_register_script('parse', plugin_dir_url(__FILE__) . '../public/js/parse.js', ['jquery']);
+                wp_localize_script('parse', 'parse_vars', $this->get_parse_data());
+                wp_enqueue_script('parse');
+            }
         }
 
     }
@@ -92,7 +94,7 @@ class LinksChecking
 
         foreach ($checked_host_urls as $url) {
             $post_path = basename(untrailingslashit(parse_url($url, PHP_URL_PATH))) ? basename(untrailingslashit(parse_url($url, PHP_URL_PATH))) : '';
-            if ($post_path ? (get_object_vars(get_page_by_path($post_path, OBJECT, Functions::get_list_post_types() )) ? true : false) : false) {
+            if ($post_path ? (get_object_vars(get_page_by_path($post_path, OBJECT, Functions::get_list_post_types())) ? true : false) : false) {
                 $counter++;
             }
         }

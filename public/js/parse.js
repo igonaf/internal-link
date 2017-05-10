@@ -26,7 +26,6 @@ var applocation = {
                     });
 
                     counter = validated_host_urls.length;
-
                     if (counter>=min_quatity_of_links) {
 
                         jQuery.ajax({
@@ -46,6 +45,8 @@ var applocation = {
                             },
                             error: function () {
                                 alert('failed check');
+                                event.preventDefault();
+                                _this.render_message_block(min_quatity_of_links);
                             }
                         });
                     } else {
