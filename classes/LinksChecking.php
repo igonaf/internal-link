@@ -95,10 +95,10 @@ class LinksChecking
             if ($parse_url_res = parse_url($url, PHP_URL_QUERY)) {
                 parse_str($parse_url_res, $output_vars);
                 $custom_types = Functions::get_list_post_types(['_builtin' => false]);
-                $available_custom_types = array_intersect_key($custom_types, Functions::get_IL_option('post_types'));
+                //$available_custom_types = array_intersect_key($custom_types, Functions::get_IL_option('post_types'));
 
-                if (!empty($available_custom_types)) {
-                    foreach ($available_custom_types as $custom_type) {
+                if (!empty($custom_types)) {
+                    foreach ($custom_types as $custom_type) {
                         if (array_key_exists($custom_type, $output_vars)) {
                             if ($obj = get_page_by_path($output_vars[$custom_type], OBJECT, $custom_types)) {
                                 $counter++;
