@@ -8,9 +8,12 @@ require_once('Functions.php');
 class LinksChecking
 {
 
+    private $list_post_types = [];
+
     public function __construct()
     {
         $this->add_actions();
+        $this->list_post_types = Functions::get_list_post_types();
     }
 
     /**
@@ -47,7 +50,7 @@ class LinksChecking
             'domain' => $this->get_current_domain(),
             'admin_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('check_parse'),
-            'min_quatity_of_links' => Functions::get_IL_option('input')
+            'min_quatity_of_links' => Functions::get_IL_option('input'),
         ];
     }
 
@@ -73,7 +76,6 @@ class LinksChecking
         add_action('wp_ajax_check_parse', [$this, 'check_parse']);
     }
 
-
     /**
      * ajax callback
      *
@@ -88,15 +90,30 @@ class LinksChecking
         $checked_host_urls = $_POST['validated_host_urls'];
         $counter = 0;
 
-        if (!is_array($checked_host_urls)) {
-            wp_die();
-        }
-
         foreach ($checked_host_urls as $url) {
-            $post_path = basename(untrailingslashit(parse_url($url, PHP_URL_PATH))) ? basename(untrailingslashit(parse_url($url, PHP_URL_PATH))) : '';
-            if ($post_path ? (get_object_vars(get_page_by_path($post_path, OBJECT, Functions::get_list_post_types())) ? true : false) : false) {
+
+            if ($parse_url_res = parse_url($url, PHP_URL_QUERY)) {
+                parse_str($parse_url_res, $output_vars);
+                $custom_types = Functions::get_list_post_types(['_builtin' => false]);
+                $available_custom_types = array_intersect_key($custom_types, Functions::get_IL_option('post_types'));
+
+                if (!empty($available_custom_types)) {
+                    foreach ($available_custom_types as $custom_type) {
+                        if (array_key_exists($custom_type, $output_vars)) {
+                            if ($obj = get_page_by_path($output_vars[$custom_type], OBJECT, $custom_types)) {
+                                $counter++;
+                                continue 2;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            if (url_to_postid($url)) {
                 $counter++;
             }
+
         }
 
         echo $counter;

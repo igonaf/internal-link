@@ -26,15 +26,17 @@ class Functions
      *
      * @return array
      */
-    static function get_list_post_types()
+    static function get_list_post_types($additional_params = [])
     {
         $exception = 'attachment';
         $args = [
-            'public' => true,
+            'public' => true
         ];
+        $args_res = array_merge($args, $additional_params);
+
         $output = 'names'; // names or objects, note names is the default
         $operator = 'and'; // 'and' or 'or'
-        $post_types = get_post_types($args, $output, $operator);
+        $post_types = get_post_types($args_res, $output, $operator);
         if (array_key_exists($exception, $post_types)) {
             unset($post_types[$exception]);
         }

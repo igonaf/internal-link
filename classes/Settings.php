@@ -1,13 +1,13 @@
 <?php
 
-require_once ('Functions.php');
+require_once('Functions.php');
 
 /**
  * Class Settings
  */
 class Settings
 {
-    const MIN_LINKS_QUANTITY=10;
+    const MIN_LINKS_QUANTITY = 10;
 
     public function __construct()
     {
@@ -62,7 +62,6 @@ class Settings
         add_settings_section('internal_link_section_post', 'Post types', '', 'internal_link_page');
 
         add_settings_field('IL_field1', 'Minimum quantity of links', [$this, 'fill_IL_field1'], 'internal_link_page', 'internal_link_section');
-        //add_settings_field('internal_link_unique', 'Unique links', [$this, 'internal_link_unique_cb'], 'internal_link_page', 'internal_link_section');
 
         $qountity_types = Functions::get_list_post_types();
 
@@ -100,16 +99,6 @@ class Settings
                       value="1" <?php checked(1, $data) ?> /></label>
         <?php
     }
-
-   /* public function internal_link_unique_cb()
-    {
-        $data = Functions::get_IL_option('unique');
-
-        ?>
-        <label><input type="checkbox" name="internal_link_option_name[unique]"
-                      value="1" <?php checked(1, $data) ?> /></label>
-        <?php
-    }*/
 
     /**
      * simple input validation
